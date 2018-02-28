@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+    <script type="text/javascript">
+	/*global CanvasJS io */
+	window.onload = function () {
+		
+		var port = window.location.port,
+	    host = window.location.hostname,
+	    protocol = window.location.protocol,
+	    path = '/',
+	    url, 
+	    options = { };
+	
+		if( protocol.indexOf( 'https' ) > -1 ) {
+		    protocol = 'wss:';
+		} else {
+		    protocol = 'ws:'
+		}
+		
+		url = protocol + "//" + host + ":" + port + path;
+		
+		options = { };
+	
+		/*
+		// If you wanted to add an access token, "Session" is where I store this
+		if( Session.token ) {
+		   options.query = 'access_token=' + Session.token;
+		}
+		*/
+	
+		var socket = io( url, options );
+		
+		function getDateTime() {
+		    var time = new Date().getTime();
+		    // 32400000 is (GMT+9 Japan)
+		    // for your timezone just multiply +/-GMT by 36000000
+		    //var datestr = new Date(time + 19800000).toISOString().replace(/T/, ' ').replace(/Z/, '');
+		    var dateTime = time; //+ 19800000;
+		    return dateTime;
+		}
+		//var socket = io.connect('http://10.95.145.56:5002');
+	};
+	</script>
+    <script type="text/javascript" src="../public/js/chart.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+ This is it
+</body>
+
+</html>
