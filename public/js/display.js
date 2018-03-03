@@ -29,7 +29,19 @@ var voltageChart = new Chart(voltageCtx, {
 		options: {
 			scales: {
 				xAxes: [{
-					type: 'linear',
+					type: 'time',
+                    time: {
+                        unit: 'second', 
+                        displayFormats: {
+                            second: 'YY:MM:DD:h:mm:ss'
+                        }
+                    },
+                    distribution: 'series',
+                    bounds: 'data',
+                   
+                    ticks: {
+                        source: 'data'
+                    },
 					position: 'bottom',
 					scaleLabel :{
 						display :true,
@@ -80,7 +92,19 @@ var voltageChart = new Chart(voltageCtx, {
 		options: {
 			scales: {
 				xAxes: [{
-					type: 'linear',
+					type: 'time',
+                    time: {
+                        unit: 'second', 
+                        displayFormats: {
+                            second: 'YY:MM:DD:h:mm:ss'
+                        }
+                    },
+                    distribution: 'series',
+                    bounds: 'data',
+                   
+                    ticks: {
+                        source: 'data'
+                    },
 					position: 'bottom',
 					scaleLabel :{
 						display :true,
@@ -107,7 +131,7 @@ var voltageChart = new Chart(voltageCtx, {
             responsive: true,
             maintainAspectRatio: false, 
             animation: {
-                duration: 100, // general animation time
+                duration: 0, // general animation time
             },
             elements: {
                 line: {
@@ -148,10 +172,35 @@ var voltageChart = new Chart(voltageCtx, {
         var time = new Date().getTime();
         // 32400000 is (GMT+9 Japan)
         // for your timezone just multiply +/-GMT by 36000000
-        //var datestr = new Date(time + 19800000).toISOString().replace(/T/, ' ').replace(/Z/, '');
+        var datestr = new Date(time + 19800000).toISOString().replace(/T/, ' ').replace(/Z/, '');
         var dateTime = time; //+ 19800000;
+        //var datetime = new Date().today() + " @ " + new Date().timeNow();
         return dateTime;
     }
+
+//     function getDateTime() {
+
+//     var date = new Date();
+
+//     var hour = date.getHours();
+//     hour = (hour < 10 ? "0" : "") + hour;
+
+//     var min  = date.getMinutes();
+//     min = (min < 10 ? "0" : "") + min;
+
+//     var sec  = date.getSeconds();
+//     sec = (sec < 10 ? "0" : "") + sec;
+
+//     var year = date.getFullYear();
+
+//     var month = date.getMonth() + 1;
+//     month = (month < 10 ? "0" : "") + month;
+
+//     var day  = date.getDate();
+//     day = (day < 10 ? "0" : "") + day;
+
+//     return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+// }
 
     function addData(charts, data) {
         charts[0].data.datasets[0].data.push(data[0]);
