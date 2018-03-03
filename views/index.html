@@ -2,14 +2,28 @@
 <html>
 
 <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel='stylesheet' href='../css/bootstrap.min.css' type='text/css' media='all' />
 
-    
+    <title>BMS Display</title>
+
     <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
-    <canvas id="myChart" width="400" height="400"></canvas>
-        <script src="../js/chart.bundle.min.js"></script>
+    <div class="container">
+        <div style="width: 50%">
+        <canvas id="voltageChart" width="400" height="400"></canvas>
+        </div>
+        <div style="width: 50%">
+        <canvas id="currentChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/chart.bundle.min.js"></script>
     <script src="../js/display.js"></script>
 </body>
 

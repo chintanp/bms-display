@@ -2,32 +2,77 @@
 /*global CanvasJS io */
 window.onload = function () {
 
-    var ctx = document.getElementById("myChart").getContext("2d");
+    var voltageCtx = document.getElementById("voltageChart").getContext("2d");
+    var currentCtx = document.getElementById("currentChart").getContext("2d");
     /* keep history of old charts for comparison? */
-var charts = [];
+var voltageChart = [];
+var currentChart = [];
 var chartdata = [];
+var MAX_POINTS_ON_CHART = 50;
 
-function timeChart(id, data, title, ylabel) {
-
-    // clear chart if it already exists
-    // otherwise hover events will not work
-    var old = charts.filter(function( obj ) {
-        return obj.id == id;
-    });
-
-    if (old.length > 0) {
-        old.forEach(function(c) {
-            c.chart.destroy();
-        })
-    }
-
-    // create new chart
-	var ctx = document.getElementById(id);
-	var chart = new Chart(ctx, {
+var voltageChart = new Chart(voltageCtx, {
 		type: 'line',
 		data: {
 			datasets: [{
-				data: data,
+                label: "Predicted Voltage",
+				data: [],
+				strokeColor: "rgba(151,187,205,1)",
+				borderColor: "rgba(151,187,205,0.8)"
+			}, 
+            {
+                label: "Measured Voltage",
+				data: [],
+				strokeColor: "rgba(255,99,132,1)",
+				borderColor: "rgba(255,99,132,0.8)"
+			}]
+		},
+		options: {
+			scales: {
+				xAxes: [{
+					type: 'linear',
+					position: 'bottom',
+					scaleLabel :{
+						display :true,
+						labelString : "Time (sec)"
+					},
+					gridLines: {
+						display:false
+					}
+				}],
+				yAxes: [{
+					scaleLabel :{
+						display :true,
+						labelString : "Voltage (mV)"
+					},
+					gridLines: {
+						display:false
+					}, 
+                    stacked: true
+				}]
+			},
+			title: {
+				display: true,
+				text: "Real-time Measured and Predicted Voltage"
+			},
+            responsive: true,
+            maintainAspectRatio: false, 
+            animation: {
+                duration: 100, // general animation time
+            },
+            elements: {
+                line: {
+                    tension: 0, // disables bezier curves
+                }
+            }
+		}
+	});
+
+    var currentChart = new Chart(currentCtx, {
+		type: 'line',
+		data: {
+			datasets: [{
+                label: "Current",
+				data: [],
 				strokeColor: "rgba(151,187,205,1)",
 				borderColor: "rgba(151,187,205,0.8)"
 			}]
@@ -48,7 +93,7 @@ function timeChart(id, data, title, ylabel) {
 				yAxes: [{
 					scaleLabel :{
 						display :true,
-						labelString : ylabel
+						labelString : "Current (mA)"
 					},
 					gridLines: {
 						display:false
@@ -57,17 +102,20 @@ function timeChart(id, data, title, ylabel) {
 			},
 			title: {
 				display: true,
-				text: title
+				text: "Real-time Current"
 			},
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false, 
+            animation: {
+                duration: 100, // general animation time
+            },
+            elements: {
+                line: {
+                    tension: 0, // disables bezier curves
+                }
+            }
 		}
 	});
-    charts.push({
-        id: id,
-        chart: chart
-    });
-}
 
 
     var port = window.location.port,
@@ -94,21 +142,8 @@ function timeChart(id, data, title, ylabel) {
     }
     */
 
-    var options = {
-        animation: false,
-        //Boolean - If we want to override with a hard coded scale
-        scaleOverride: true,
-        //** Required if scaleOverride is true **
-        //Number - The number of steps in a hard coded scale
-        scaleSteps: 10,
-        //Number - The value jump in the hard coded scale
-        scaleStepWidth: 10,
-        //Number - The scale starting value
-        scaleStartValue: 0
-    };
     var socket = io(url, options);
     
-
     function getDateTime() {
         var time = new Date().getTime();
         // 32400000 is (GMT+9 Japan)
@@ -118,9 +153,18 @@ function timeChart(id, data, title, ylabel) {
         return dateTime;
     }
 
-    function addData(chart, data) {
-        chart.data.datasets.push(data);
-        chart.update();
+    function addData(charts, data) {
+        charts[0].data.datasets[0].data.push(data[0]);
+        charts[0].data.datasets[1].data.push(data[1]);
+        charts[0].data.datasets[0].label = "Predicted Voltage: " + (parseFloat(data[0].y) - parseFloat(data[1].y)) + " mV";
+        charts[1].data.datasets[0].data.push(data[2]);
+        if(charts[0].chart.data.datasets[0].data.length >= MAX_POINTS_ON_CHART) {
+            charts[0].data.datasets[0].data.shift();
+            charts[0].data.datasets[1].data.shift();
+            charts[1].data.datasets[0].data.shift();
+        }
+        charts[0].update();
+        charts[1].update();
     }
 
     socket.on('connect', function () {
@@ -129,11 +173,13 @@ function timeChart(id, data, title, ylabel) {
 
     socket.on('sensor:data', function (data) {
         //console.log("Some data recevied" + JSON.stringify(data));
-
-        chartdata.push({ x: getDateTime(), y: data.data.objectTemp });
-        console.log("Chartdata:" + JSON.stringify(chartdata));
-        timeChart('myChart', chartdata, 'Voltage', 'Voltage (V)');
-
+        var timenow = getDateTime();
+        var newdata = [{ x: timenow, y: data.data.objectTemp }, 
+                        { x: timenow, y: data.data.ambientTemp }, 
+                        { x: timenow, y: data.data.ambientTemp }];
+        console.log("Chartdata:" + JSON.stringify(newdata));
+        addData([voltageChart, currentChart], newdata);
+          
 
     });
 
