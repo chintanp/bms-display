@@ -59,7 +59,7 @@ var voltageChart = new Chart(voltageCtx, {
 					gridLines: {
 						display:false
 					}, 
-                    stacked: true
+                    stacked: false
 				}]
 			},
 			title: {
@@ -205,7 +205,7 @@ var voltageChart = new Chart(voltageCtx, {
     function addData(charts, data) {
         charts[0].data.datasets[0].data.push(data[0]);
         charts[0].data.datasets[1].data.push(data[1]);
-        charts[0].data.datasets[0].label = "Predicted Voltage: " + (parseFloat(data[0].y) - parseFloat(data[1].y)) + " mV";
+        charts[0].data.datasets[0].label = "Predicted Voltage: " + (parseFloat(data[0].y).toFixed(2) - parseFloat(data[1].y).toFixed(2)) + " mV";
         charts[1].data.datasets[0].data.push(data[2]);
         if(charts[0].chart.data.datasets[0].data.length >= MAX_POINTS_ON_CHART) {
             charts[0].data.datasets[0].data.shift();
@@ -223,10 +223,11 @@ var voltageChart = new Chart(voltageCtx, {
     socket.on('sensor:data', function (data) {
         //console.log("Some data recevied" + JSON.stringify(data));
         var timenow = getDateTime();
-        var newdata = [{ x: timenow, y: data.data.objectTemp }, 
-                        { x: timenow, y: data.data.ambientTemp }, 
-                        { x: timenow, y: data.data.ambientTemp }];
+        var newdata = [{ x: timenow, y: data.data.predictedVoltage }, 
+                        { x: timenow, y: data.data.measuredVoltage }, 
+                        { x: timenow, y: data.data.current }];
         console.log("Chartdata:" + JSON.stringify(newdata));
+		document.getElementById("p_exectime").innerHTML = parseFloat(data.data.exectime).toFixed(2)
         addData([voltageChart, currentChart], newdata);
           
 
