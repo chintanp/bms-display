@@ -3,8 +3,8 @@ var express = require('express'),
 		socket = require('./routes/socket.js'),
 		path = require('path'), //For manipulating file-paths
 		spawn = require('child_process').spawn;
-
-
+		
+var SIMULATION_TIME = 1.0;
 var child = spawn('./model_sim');
 child.stdout.setEncoding('utf8');
 
@@ -23,8 +23,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
 
-var objectTemp = 0;
-var ambientTemp = 0;
 var childdata = [];
 
 child.stdout.on('data', function (data) {
@@ -40,9 +38,6 @@ io.on('connect', function (http_socket) {
 		console.log('Sending sensor data: ' + childdata);
 
 		http_socket.emit('sensor:data', {
-			id: 'sensortag-mock1',
-			type: 'sensortag',
-			sensor: 'irTemperature',
 			data: {
 				predictedVoltage: childdata[0],
 				measuredVoltage: childdata[1],
@@ -50,10 +45,10 @@ io.on('connect', function (http_socket) {
 				exectime: childdata[3]
 			}
 		});
-	}, 1000);
+	}, SIMULATION_TIME * 1000);
 });
 
-server.listen(80, function () {
+server.listen(3000, function () {
 	console.log("Express server listening on port %d in %s mode",
 			this.address().port, app.settings.env);
 });

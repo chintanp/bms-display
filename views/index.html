@@ -9,25 +9,67 @@
 
     <title>BMS Display</title>
 
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+        }
+    </style>
+
     <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <div>
-            <p id="p_exectime"></p>
+        <div class="jumbotron text-white bg-info">
+            <h1 class="display-3">BMS Display</h1>
         </div>
-        <div>
-	    <p id="p_soc"></p>
+        <div class="card-group">
+            <div class="card  text-center border-primary ">
+
+                <div class="card-body">
+                    <h4 class="card-title">SOC</h4>
+                    <h5 class="card-text" id="p_soc"></h5>
+                </div>
+            </div>
+            <div class="card  text-center border-success ">
+
+                <div class="card-body">
+                    <h4 class="card-title">Error in Voltage (mV)</h4>
+                    <h5 class="card-text" id="p_error"></h5>
+                </div>
+            </div>
+            <div class="card  text-center border-info ">
+
+                <div class="card-body">
+                    <h4 class="card-title">Execution Time (s)</h4>
+                    <h5 class="card-text" id="p_exectime"></h5>
+                </div>
+            </div>
         </div>
-        <div style="width: 50%">
-            <canvas id="voltageChart" width="400" height="400"></canvas>
-        </div>
-        <div style="width: 50%">
-            <canvas id="currentChart" width="400" height="400"></canvas>
+        </br>
+
+        <div class="row">
+            <div class="col-lg-6">
+
+                <div class="card card-body text-center border-info">
+                    <h4 class="card-title">Voltage</h4>
+
+                    <canvas id="voltageChart" width="400" height="300"></canvas>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card card-body text-center border-warning">
+                    <h4 class="card-title">Current</h4>
+
+                    <canvas id="currentChart" width="400" height="300"></canvas>
+
+                </div>
+            </div>
         </div>
     </div>
-    <script src="../js/jquery-3.3.1.min.js"</script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/chart.bundle.min.js"></script>
     <script src="../js/display.js"></script>

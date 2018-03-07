@@ -67,13 +67,13 @@ var voltageChart = new Chart(voltageCtx, {
 				text: "Real-time Measured and Predicted Voltage"
 			},
             responsive: true,
-            maintainAspectRatio: false, 
+            maintainAspectRatio: true, 
             animation: {
-                duration: 100, // general animation time
+                duration: 100 // general animation time
             },
             elements: {
                 line: {
-                    tension: 0, // disables bezier curves
+                    tension: 0 // disables bezier curves
                 }
             }
 		}
@@ -86,7 +86,7 @@ var voltageChart = new Chart(voltageCtx, {
                 label: "Current",
 				data: [],
 				strokeColor: "rgba(151,187,205,1)",
-				borderColor: "rgba(151,187,205,0.8)"
+				borderColor: "#3cba9f"
 			}]
 		},
 		options: {
@@ -129,7 +129,7 @@ var voltageChart = new Chart(voltageCtx, {
 				text: "Real-time Current"
 			},
             responsive: true,
-            maintainAspectRatio: false, 
+            maintainAspectRatio: true, 
             animation: {
                 duration: 0, // general animation time
             },
@@ -205,7 +205,7 @@ var voltageChart = new Chart(voltageCtx, {
     function addData(charts, data) {
         charts[0].data.datasets[0].data.push(data[0]);
         charts[0].data.datasets[1].data.push(data[1]);
-        charts[0].data.datasets[0].label = "Predicted Voltage: " + parseFloat(parseFloat(data[0].y).toFixed(2) - parseFloat(data[1].y).toFixed(2)).toFixed(2) + " mV";
+        charts[0].data.datasets[0].label = "Predicted Voltage";
         charts[1].data.datasets[0].data.push(data[2]);
         if(charts[0].chart.data.datasets[0].data.length >= MAX_POINTS_ON_CHART) {
             charts[0].data.datasets[0].data.shift();
@@ -228,7 +228,9 @@ var voltageChart = new Chart(voltageCtx, {
                         { t: timenow, y: data.data.current }];
         console.log("Chartdata:" + JSON.stringify(newdata));
 		document.getElementById("p_exectime").innerHTML = parseFloat(data.data.exectime).toFixed(2)
-        addData([voltageChart, currentChart], newdata);
+        document.getElementById("p_error").innerHTML = parseFloat((data.data.predictedVoltage - data.data.measuredVoltage)*100/data.data.measuredVoltage).toFixed(2) + "%";
+		
+		addData([voltageChart, currentChart], newdata);
           
 
     });
