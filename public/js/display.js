@@ -227,8 +227,10 @@ var voltageChart = new Chart(voltageCtx, {
                         { t: timenow, y: data.data.measuredVoltage }, 
                         { t: timenow, y: data.data.current }];
         console.log("Chartdata:" + JSON.stringify(newdata));
-		document.getElementById("p_exectime").innerHTML = parseFloat(data.data.exectime).toFixed(2)
-        document.getElementById("p_error").innerHTML = parseFloat((data.data.predictedVoltage - data.data.measuredVoltage)*100/data.data.measuredVoltage).toFixed(2) + "%";
+		document.getElementById("p_exectime").innerHTML = parseFloat(data.data.exectime).toFixed(2) + " s"
+        document.getElementById("p_error").innerHTML =  parseFloat(data.data.predictedVoltage - data.data.measuredVoltage).toFixed(2) + 
+				" mV | " + parseFloat((data.data.predictedVoltage - 
+				data.data.measuredVoltage)*100/data.data.measuredVoltage).toFixed(2) + " %" ;
 		
 		addData([voltageChart, currentChart], newdata);
           
