@@ -3,10 +3,13 @@ var express = require('express'),
 		socket = require('./routes/socket.js'),
 		path = require('path'), //For manipulating file-paths
 		spawn = require('child_process').spawn;
-		
-var SIMULATION_TIME = 1.0;
-var child = spawn('./model_sim');
-child.stdout.setEncoding('utf8');
+
+var SerialPort = require('serialport');
+var port = new SerialPort("COM30");
+
+var SIMULATION_TIME = 2.0;
+// var child = spawn('./model_sim');
+//child.stdout.setEncoding('utf8');
 
 var app = module.exports = express();
 var server = require('http').createServer(app);
@@ -25,9 +28,16 @@ app.get('*', routes.index);
 
 var childdata = [];
 
-child.stdout.on('data', function (data) {
+// child.stdout.on('data', function (data) {
+// 	childdata = data.split(" ");
+// });
+
+
+port.on('data', function (data) {
+	console.log('Data:', data.toString());
 	childdata = data.split(" ");
-});
+  });
+
 // TODO: Error handling for socket.io
 io.on('connect', function (http_socket) {
 	console.log("Socket connected");
