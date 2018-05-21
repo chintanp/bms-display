@@ -5,9 +5,15 @@ var express = require('express'),
 		spawn = require('child_process').spawn;
 
 var SerialPort = require('serialport');
-var port = new SerialPort("COM30");
+var createInterface = require('readline').createInterface;
 
-var SIMULATION_TIME = 2.0;
+var port = new SerialPort("COM4");
+// Getting data line by line as shown here: https://stackoverflow.com/questions/42730976/read-node-serialport-stream-line-by-line 
+var lineReader = createInterface({
+  input: port
+});
+
+var SIMULATION_TIME = 5.0;
 // var child = spawn('./model_sim');
 //child.stdout.setEncoding('utf8');
 
@@ -33,10 +39,16 @@ var childdata = [];
 // });
 
 
-port.on('data', function (data) {
+/* port.on('data', function (data) {
 	console.log('Data:', data.toString());
-	childdata = data.split(" ");
-  });
+	childdata = data.toString().split("\t");
+  }); */
+  
+lineReader.on('line', function (line) {
+  console.log(line);
+  childdata = line.toString().split("\t");
+  
+});
 
 // TODO: Error handling for socket.io
 io.on('connect', function (http_socket) {
