@@ -8,7 +8,7 @@ window.onload = function () {
 var voltageChart = [];
 var currentChart = [];
 var chartdata = [];
-var MAX_POINTS_ON_CHART = 50;
+var MAX_POINTS_ON_CHART = 500;
 
 var voltageChart = new Chart(voltageCtx, {
 		type: 'line',
@@ -227,7 +227,7 @@ var voltageChart = new Chart(voltageCtx, {
                         { t: timenow, y: data.data.measuredVoltage }, 
                         { t: timenow, y: data.data.current }];
         console.log("Chartdata:" + JSON.stringify(newdata));
-		document.getElementById("p_exectime").innerHTML = parseFloat(data.data.exectime).toFixed(2) + " s"
+		// document.getElementById("p_exectime").innerHTML = parseFloat(data.data.exectime).toFixed(2) + " s"
         document.getElementById("p_error").innerHTML =  parseFloat(data.data.predictedVoltage - data.data.measuredVoltage).toFixed(2) + 
 				" mV | " + parseFloat((data.data.predictedVoltage - 
 				data.data.measuredVoltage)*100/data.data.measuredVoltage).toFixed(2) + " %" ;

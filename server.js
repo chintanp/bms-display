@@ -13,7 +13,7 @@ var lineReader = createInterface({
   input: port
 });
 
-var SIMULATION_TIME = 5.0;
+var SIMULATION_TIME = 1.0;
 // var child = spawn('./model_sim');
 //child.stdout.setEncoding('utf8');
 
