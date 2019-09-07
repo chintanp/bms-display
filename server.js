@@ -47,7 +47,7 @@ var childdata = [];
 lineReader.on('line', function (line) {
   console.log(line);
   childdata = line.toString().split("\t");
-  
+  console.log(childdata);
 });
 
 // TODO: Error handling for socket.io
@@ -64,7 +64,7 @@ io.on('connect', function (http_socket) {
 				predictedVoltage: childdata[0],
 				measuredVoltage: childdata[1],
 				current: childdata[2],
-				exectime: childdata[3]
+				soc: childdata[3]
 			}
 		});
 	}, SIMULATION_TIME * 1000);
