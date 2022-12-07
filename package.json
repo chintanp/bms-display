@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/chintanp/bms-display#readme",
   "dependencies": {
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "serialport": "^6.1.1",
     "socket.io": "^2.0.4"
   }
