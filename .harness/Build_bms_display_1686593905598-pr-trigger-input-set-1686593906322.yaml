@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_bms_display_1686593905598-pr-trigger-input-set
+  identifier: Build_bms_display_1686593905598prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: test1
+  pipeline:
+    identifier: Build_bms_display_1686593905598
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
