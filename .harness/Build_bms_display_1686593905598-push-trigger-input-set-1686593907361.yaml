@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_bms_display_1686593905598-push-trigger-input-set
+  identifier: Build_bms_display_1686593905598pushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: test1
+  pipeline:
+    identifier: Build_bms_display_1686593905598
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
